@@ -8,6 +8,7 @@
     'depends': ['base', 'portal', 'point_of_sale'],
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
         'views/wuchang_views.xml',
         'data/product_categories.xml',
         'data/pos_part1/product.template.csv',
