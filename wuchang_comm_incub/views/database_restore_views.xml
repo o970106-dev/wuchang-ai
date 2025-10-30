@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_community_database_restore_form" model="ir.ui.view">
+            <field name="name">community.database.restore.wizard.form</field>
+            <field name="model">community.database.restore.wizard</field>
+            <field name="arch" type="xml">
+                <form string="資料庫修復工具">
+                    <sheet>
+                        <group>
+                            <label string="使用此工具可以重新匯入模組內建資料。" colspan="2"/>
+                            <label string="請於執行前備份資料庫，避免覆蓋自訂資料。" colspan="2"/>
+                        </group>
+                        <group>
+                            <field name="restore_products"/>
+                            <field name="restore_users"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_restore" type="object" string="執行修復" class="btn-primary"/>
+                        <button string="取消" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_community_database_restore" model="ir.actions.act_window">
+            <field name="name">資料修復</field>
+            <field name="res_model">community.database.restore.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_community_database_restore_form"/>
+        </record>
+    </data>
+</odoo>
+

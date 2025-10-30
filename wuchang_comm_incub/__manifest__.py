@@ -9,6 +9,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/wuchang_views.xml',
+        'views/database_restore_views.xml',
         'data/product_categories.xml',
         'data/pos_part1/product.template.csv',
         'data/pos_part2/product.template.csv',
