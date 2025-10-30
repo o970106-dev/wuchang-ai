@@ -6,6 +6,7 @@ services:
       - db
     ports:
       - "8069:8069"
+      - "80:8069"
     environment:
       - ODOO_MASTER_PASSWORD=admin
     volumes:
