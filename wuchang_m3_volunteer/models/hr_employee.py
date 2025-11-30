@@ -26,3 +26,11 @@ class HrEmployee(models.Model):
         string='社區幣錢包',
         ondelete='set null',
     )
+
+    _sql_constraints = [
+        (
+            'unique_wallet_per_volunteer',
+            'unique(x_wallet_id)',
+            '社區幣錢包只能綁定至單一志工。',
+        ),
+    ]

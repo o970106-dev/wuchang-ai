@@ -31,7 +31,19 @@
             <field name="context">{}</field>
         </record>
 
-        <menuitem id="menu_volunteer_root" name="志工專勤隊" sequence="10" parent="hr.menu_hr_root" groups="wuchang_m3_volunteer.group_volunteer_manager"/>
-        <menuitem id="menu_volunteer_skill" name="志工技能" parent="menu_volunteer_root" action="action_wuchang_skill" groups="wuchang_m3_volunteer.group_volunteer_manager"/>
+        <menuitem
+            id="menu_volunteer_root"
+            name="志工專勤隊"
+            sequence="10"
+            parent="hr.menu_hr_root"
+            groups="wuchang_m3_volunteer.group_volunteer_manager"
+        />
+        <menuitem
+            id="menu_volunteer_skill"
+            name="志工技能"
+            parent="menu_volunteer_root"
+            action="action_wuchang_skill"
+            groups="wuchang_m3_volunteer.group_volunteer_manager"
+        />
     </data>
 </odoo>
