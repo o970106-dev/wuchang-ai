@@ -62,20 +62,17 @@ class PropertyRequest(models.Model):
             task = self.env['project.task'].create(task_vals)
             self.with_context(skip_property_request_auto=True).write({'task_id': task.id})
 
-        volunteers = self.env['hr.employee'].search([
-            ('x_is_volunteer', '=', True),
-        ])
-        eligible_message = False
+        volunteer_domain = [('x_is_volunteer', '=', True)]
         if self.required_skill_id:
-            volunteers = volunteers.filtered(lambda v: self.required_skill_id in v.x_volunteer_skills)
-            if volunteers:
-                eligible_names = ', '.join(volunteers.mapped('name'))
-                eligible_message = _('符合條件的志工：%s') % eligible_names
-            else:
-                eligible_message = _('目前沒有符合技能「%s」的志工。') % self.required_skill_id.name
+            volunteer_domain.append(('x_volunteer_skills', 'in', self.required_skill_id.id))
+
+        volunteers = self.env['hr.employee'].search(volunteer_domain)
+        eligible_message = False
+        if self.required_skill_id and not volunteers:
+            eligible_message = _('目前沒有符合技能「%s」的志工。') % self.required_skill_id.name
         elif volunteers:
             eligible_names = ', '.join(volunteers.mapped('name'))
-            eligible_message = _('志工清單：%s') % eligible_names
+            eligible_message = _('符合條件的志工：%s') % eligible_names
 
         volunteer_with_user = volunteers.filtered(lambda v: v.user_id)[:1]
         if volunteer_with_user:
