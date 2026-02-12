@@ -43,6 +43,14 @@
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem id="menu_fund_audit" name="資金稽核" parent="menu_wuchang_root" action="action_fund_audit" sequence="50"/>
+
+        <!-- Database Restore Wizard -->
+        <menuitem id="menu_database_restore"
+                  name="資料修復"
+                  parent="menu_wuchang_root"
+                  action="action_community_database_restore"
+                  groups="base.group_system"
+                  sequence="60"/>
         <!-- Login page background div injection -->
         <template id="wuchang_login_bg" inherit_id="web.login" name="Wuchang Login Background">
             <xpath expr="//div[contains(@class,'o_web_login')]" position="inside">
