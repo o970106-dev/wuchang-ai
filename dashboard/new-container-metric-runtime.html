@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>新容器高維度規張量狀態介面</title>
+  <style>
+    :root{--bg:#08111f;--panel:#0f172a;--panel2:#111827;--text:#e5e7eb;--muted:#94a3b8;--line:#334155;--green:#22c55e;--blue:#38bdf8;--yellow:#f59e0b;--red:#ef4444;--violet:#a78bfa}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#1e293b,var(--bg));color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}header{padding:28px 32px 16px;border-bottom:1px solid var(--line);background:rgba(8,17,31,.86);position:sticky;top:0;z-index:9;backdrop-filter:blur(10px)}h1{margin:0 0 8px;font-size:28px}.sub{color:var(--muted);max-width:1200px}main{max-width:1500px;margin:auto;padding:24px 32px 60px}section{margin:24px 0}h2{font-size:22px;margin:0 0 14px}.grid{display:grid;gap:16px}.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:linear-gradient(180deg,rgba(17,24,39,.98),rgba(15,23,42,.98));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 14px 30px rgba(0,0,0,.24)}.card h3{margin:0 0 8px;font-size:17px}.muted{color:var(--muted)}code{background:#020617;color:#bae6fd;padding:2px 6px;border-radius:6px}.tag{display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;border-radius:999px;font-size:12px;background:#172554;color:#bfdbfe}.tag.good{background:#052e16;color:#86efac}.tag.warn{background:#451a03;color:#fcd34d}.tag.bad{background:#450a0a;color:#fecaca}.tag.violet{background:#2e1065;color:#ddd6fe}.barwrap{height:9px;background:#020617;border:1px solid #334155;border-radius:999px;overflow:hidden;margin-top:10px}.bar{height:100%}.b95{width:95%;background:var(--green)}.b80{width:80%;background:var(--blue)}.b70{width:70%;background:var(--blue)}.b60{width:60%;background:var(--yellow)}.b45{width:45%;background:var(--yellow)}table{width:100%;border-collapse:collapse;border-radius:14px;overflow:hidden}th,td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}th{text-align:left;background:#111827;color:#cbd5e1}tr:hover td{background:rgba(30,41,59,.65)}.tensor{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.dim{border:1px dashed #475569;border-radius:14px;background:rgba(15,23,42,.7);padding:14px}.dim strong{display:block;font-size:20px;color:#7dd3fc}.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:stretch}.node{border:1px solid var(--line);border-radius:14px;background:#111827;padding:12px;min-height:118px}.arrow{text-align:center;color:var(--muted);font-size:24px;align-self:center}.metric{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#020617;border:1px solid #1f2937;border-radius:14px;padding:14px;overflow:auto;color:#c4b5fd}.note{border-left:4px solid var(--blue);padding:12px 14px;background:rgba(15,23,42,.78);border-radius:10px}@media(max-width:1100px){.cols3,.cols4,.tensor,.flow{grid-template-columns:1fr}header,main{padding-left:18px;padding-right:18px}.arrow{display:none}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>新容器高維度規張量狀態介面</h1>
+  <div class="sub">以現行容器為 protected baseline，將 Odoo、PostgreSQL、AI Gateway、治理容器與本地 LLM 重構為五維度規狀態圖。此頁只描述與治理，不代表已變更任何容器。</div>
+</header>
+<main>
+<section>
+  <h2>一、五維度規張量狀態</h2>
+  <div class="tensor">
+    <div class="dim"><strong>x</strong>容器服務位置<br><span class="muted">Odoo / PG / AI / Voice / Governance</span></div>
+    <div class="dim"><strong>y</strong>營運邏輯邊界<br><span class="muted">公益、商業、物業、會員、POS</span></div>
+    <div class="dim"><strong>z</strong>治理與安全深度<br><span class="muted">secret、audit、local binding、rollback</span></div>
+    <div class="dim"><strong>time</strong>運行時間窗<br><span class="muted">目前容器多數 Up 2 hours</span></div>
+    <div class="dim"><strong>scale</strong>部署尺度<br><span class="muted">MSI WSL Ubuntu local runtime → GitHub audit</span></div>
+  </div>
+</section>
+<section>
+  <h2>二、現行新容器核心拓樸</h2>
+  <div class="flow">
+    <div class="node"><h3>Control Surface</h3><p class="muted">Windows / VS Code / Browser 僅為操作介面。</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><h3>Linux Canonical</h3><p><code>/home/taiji_admin/Taiji_Hub</code></p><p class="muted">runtime source of truth。</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><h3>Gateway Layer</h3><p class="muted">voice、claw-safe、device resilience、POS voice。</p></div>
+    <div class="arrow">→</div>
+    <div class="node"><h3>Business Core</h3><p class="muted">Odoo 18 + PostgreSQL + governance containers。</p></div>
+  </div>
+</section>
+<section>
+  <h2>三、容器服務矩陣</h2>
+  <table>
+    <thead><tr><th>容器</th><th>Image</th><th>度規角色</th><th>Port / 邊界</th><th>狀態</th><th>治理判斷</th></tr></thead>
+    <tbody>
+      <tr><td>wuchang_os_odoo_18</td><td>odoo:18.0</td><td>營運核心 / Odoo 主服務</td><td>127.0.0.1:8069</td><td>Up</td><td><span class="tag good">local-first</span><span class="tag warn">需備份策略</span></td></tr>
+      <tr><td>wuchang_os_pg</td><td>postgres:15</td><td>資料庫核心</td><td>5432 internal</td><td>Up</td><td><span class="tag good">內部暴露</span><span class="tag warn">資料目錄不可入 Git</span></td></tr>
+      <tr><td>wuchang_gpu_brain</td><td>ollama/ollama:latest</td><td>本地 LLM 腦</td><td>11434 internal</td><td>Up</td><td><span class="tag good">本地推理</span><span class="tag warn">需 gateway 管制</span></td></tr>
+      <tr><td>taiji_voice_gateway</td><td>taiji_voice_gateway:local</td><td>語音匝道</td><td>127.0.0.1:9201</td><td>Up</td><td><span class="tag good">localhost</span><span class="tag warn">需 auth flow 文件</span></td></tr>
+      <tr><td>taiji_claw_safe</td><td>taiji_claw_safe</td><td>安全工具 / claw gateway</td><td>127.0.0.1:9004</td><td>Up</td><td><span class="tag good">safe gateway</span><span class="tag warn">舊 claw 僅可參考</span></td></tr>
+      <tr><td>taiji_device_resilience_adapter</td><td>local build</td><td>設備韌性 adapter</td><td>internal</td><td>Up</td><td><span class="tag violet">resilience</span></td></tr>
+      <tr><td>taiji_pos_google_voice_tool</td><td>local build</td><td>POS / Google Voice 工具</td><td>internal</td><td>Up</td><td><span class="tag violet">POS voice</span></td></tr>
+      <tr><td>taiji_syslog / worklist / audit / progress</td><td>alpine:latest</td><td>治理狀態容器</td><td>internal</td><td>Up</td><td><span class="tag good">治理可視化雛形</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<section>
+  <h2>四、任務線與模組完成度</h2>
+  <div class="grid cols4">
+    <div class="card"><h3>T1 Odoo Core</h3><span class="tag good">running</span><p class="muted">Odoo 18 + PostgreSQL 已成營運核心。</p><div class="barwrap"><div class="bar b80"></div></div></div>
+    <div class="card"><h3>T2 AI Runtime</h3><span class="tag good">running</span><p class="muted">Ollama、Voice Gateway、Claw Safe 已形成 AI runtime。</p><div class="barwrap"><div class="bar b70"></div></div></div>
+    <div class="card"><h3>T3 Governance Containers</h3><span class="tag good">running</span><p class="muted">syslog、audit、worklist、progress 已容器化。</p><div class="barwrap"><div class="bar b70"></div></div></div>
+    <div class="card"><h3>T4 Smart Merge</h3><span class="tag warn">approval gate</span><p class="muted">舊容器若較優，只能列候選，需請示。</p><div class="barwrap"><div class="bar b45"></div></div></div>
+  </div>
+</section>
+<section>
+  <h2>五、舊容器 / 參考設計吸收規則</h2>
+  <table>
+    <thead><tr><th>參考來源</th><th>可能價值</th><th>目前決策</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>littlej_ui_* volumes</td><td>Flowise / Grafana / n8n / OpenWebUI 類能力</td><td>candidate_for_approval</td><td>可能補 observability 與 workflow，但不可直接覆蓋現行 runtime。</td></tr>
+      <tr><td>Wuchang_Unified_Core/05_LLM_Engine</td><td>LLM topology 參考</td><td>report_only</td><td>需比對現行 Ollama baseline。</td></tr>
+      <tr><td>Taiji_Claw_Container</td><td>舊 claw 設計記憶</td><td>candidate_for_approval</td><td>現行 taiji_claw_safe 是受保護 baseline。</td></tr>
+      <tr><td>_imports/wuchang-ai-main</td><td>匯入 source review</td><td>review_only</td><td>_imports 不是主工作區。</td></tr>
+    </tbody>
+  </table>
+</section>
+<section>
+  <h2>六、非明文度規封包</h2>
+  <pre class="metric">metric_packet:
+  id: taiji.new_container.runtime_tensor.2026-05-17
+  frame: FiveDimensionalCode
+  dims: [x, y, z, time, scale]
+  x: container_service_topology
+  y: operational_logic_boundary
+  z: governance_depth_and_secret_containment
+  time: current_runtime_window
+  scale: MSI_WSL_Ubuntu_local_runtime
+  protected_baseline:
+    current_container_architecture: true
+    mutate_current_container: false
+    old_container_reference_only: true
+  active_layers:
+    business_core: [wuchang_os_odoo_18, wuchang_os_pg]
+    ai_runtime: [wuchang_gpu_brain, taiji_voice_gateway, taiji_claw_safe]
+    device_pos_voice: [taiji_device_resilience_adapter, taiji_pos_google_voice_tool]
+    governance: [taiji_syslog, taiji_worklist, taiji_audit, taiji_progress]
+  merge_policy:
+    operational_logic_required: true
+    old_superior_design_requires_user_approval: true
+    no_secret_or_runtime_data_promotion: true</pre>
+</section>
+<section>
+  <div class="note"><strong>營運邏輯結論：</strong>現行新容器已形成「Odoo 營運核心 + 本地 LLM + AI 匝道 + 治理狀態容器」的 Linux-first service mesh。舊容器應作為設計記憶，不作為直接替換來源；若舊設計在 observability、workflow 或 LLM UI 方面較優，必須先列為候選並請示。</div>
+</section>
+</main>
+</body>
+</html>
