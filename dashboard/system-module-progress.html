@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taiji / Wuchang 系統模組架構進度示意圖</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: #334155;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --info: #38bdf8;
+      --violet: #a78bfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #1e293b, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      padding: 28px 32px 12px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.85);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    .subtitle { color: var(--muted); max-width: 1100px; }
+    main { padding: 24px 32px 48px; max-width: 1500px; margin: auto; }
+    section { margin: 24px 0; }
+    h2 { margin: 0 0 14px; font-size: 22px; }
+    .grid { display: grid; gap: 16px; }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      background: linear-gradient(180deg, rgba(31,41,55,.96), rgba(17,24,39,.96));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .card h3 { margin: 0 0 8px; font-size: 17px; }
+    .muted { color: var(--muted); }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 12px; margin: 2px 4px 2px 0; background: #172554; color: #bfdbfe; }
+    .tag.warn { background: #451a03; color: #fcd34d; }
+    .tag.good { background: #052e16; color: #86efac; }
+    .tag.bad { background: #450a0a; color: #fecaca; }
+    .tag.info { background: #082f49; color: #7dd3fc; }
+    .progress-wrap { height: 10px; background: #020617; border-radius: 999px; overflow: hidden; border: 1px solid #334155; margin-top: 10px; }
+    .bar { height: 100%; border-radius: 999px; }
+    .p90 { width: 90%; background: var(--good); }
+    .p75 { width: 75%; background: var(--info); }
+    .p60 { width: 60%; background: var(--warn); }
+    .p45 { width: 45%; background: var(--warn); }
+    .p30 { width: 30%; background: var(--bad); }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 12px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 12px; vertical-align: top; }
+    th { color: #cbd5e1; text-align: left; background: #111827; }
+    tr:hover td { background: rgba(30,41,59,.75); }
+    .diagram { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: stretch; }
+    .lane { border: 1px dashed #475569; border-radius: 14px; padding: 14px; background: rgba(15,23,42,.55); }
+    .node { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 10px 0; background: #111827; }
+    .arrow { text-align: center; color: var(--muted); padding: 4px; }
+    .taskline { border-left: 3px solid var(--info); padding-left: 14px; }
+    .taskline .step { margin: 10px 0; padding: 12px; background: rgba(15,23,42,.8); border: 1px solid var(--line); border-radius: 12px; }
+    code { color: #bae6fd; background: #020617; padding: 2px 5px; border-radius: 6px; }
+    @media (max-width: 1000px) { .grid.cols-4, .grid.cols-3, .diagram { grid-template-columns: 1fr; } header, main { padding-left: 18px; padding-right: 18px; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Taiji / Wuchang 系統模組架構進度示意圖</h1>
+  <div class="subtitle">Linux-first canonical runtime：<code>/home/taiji_admin/Taiji_Hub</code>。Windows 僅作為 VS Code、瀏覽器與控制台；<code>_imports</code> 僅為匯入審查區，不是正式主工作區。</div>
+</header>
+<main>
+  <section>
+    <h2>一、整體架構圖說</h2>
+    <div class="diagram">
+      <div class="lane">
+        <h3>使用者 / 控制面</h3>
+        <div class="node"><strong>Windows UI</strong><br><span class="muted">VS Code、瀏覽器、LINE / Google Console</span></div>
+        <div class="arrow">↓ Remote WSL / SSH</div>
+        <div class="node"><strong>Codex / Agent</strong><br><span class="muted">僅能依治理任務線操作，不盲目搬檔。</span></div>
+      </div>
+      <div class="lane">
+        <h3>Linux Canonical Runtime</h3>
+        <div class="node"><strong>Taiji_Hub</strong><br><code>/home/taiji_admin/Taiji_Hub</code></div>
+        <div class="arrow">↓ Gateway / API / Governance</div>
+        <div class="node"><strong>AI Runtime Gateway</strong><br><span class="muted">LINE、Odoo、Redis、Voice、Tensor、Audit</span></div>
+      </div>
+      <div class="lane">
+        <h3>資料與治理面</h3>
+        <div class="node"><strong>GitHub</strong><br><span class="muted">只放 source、docs、tests、templates。</span></div>
+        <div class="arrow">↔ Issue #7 / #8</div>
+        <div class="node"><strong>Runtime Data</strong><br><span class="muted">Odoo filestore、DB、logs、secrets 不進 Git。</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>二、模組完成度總覽</h2>
+    <div class="grid cols-4">
+      <div class="card"><h3>Linux Canonical Workspace</h3><span class="tag good">方向已定</span><span class="tag warn">需照准</span><p class="muted">主工作區固定為 <code>/home/taiji_admin/Taiji_Hub</code>。</p><div class="progress-wrap"><div class="bar p75"></div></div></div>
+      <div class="card"><h3>Git / Audit Boundary</h3><span class="tag warn">漂移待收斂</span><p class="muted">先建立 .gitignore、pytest.ini、排除 runtime data。</p><div class="progress-wrap"><div class="bar p45"></div></div></div>
+      <div class="card"><h3>Secret Governance</h3><span class="tag bad">P0</span><p class="muted">Gemini / LINE secret 已視為暴露，需輪替並改環境變數。</p><div class="progress-wrap"><div class="bar p30"></div></div></div>
+      <div class="card"><h3>Odoo 17 Community Modules</h3><span class="tag info">已識別</span><p class="muted">wuchang_comm_incub、wuchang_3_volunteer、wuchang_1_property。</p><div class="progress-wrap"><div class="bar p60"></div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、模組項目與任務線關聯</h2>
+    <table>
+      <thead><tr><th>模組 / 層</th><th>角色</th><th>目前狀態</th><th>任務線</th><th>完成度</th></tr></thead>
+      <tbody>
+        <tr><td>Canonical Workspace</td><td>Linux 主權工作區</td><td>已確定路徑，需完成檔案照准</td><td>T1 工作區邊界收斂</td><td>75%</td></tr>
+        <tr><td>_imports Review Area</td><td>匯入來源審查區</td><td>已校正：不得當主體</td><td>T1 / T2 安全匯入</td><td>70%</td></tr>
+        <tr><td>GitHub Issues #7 #8</td><td>治理紀錄與任務追蹤</td><td>已建立 P0/P1 與授權紀錄</td><td>T0 治理照准</td><td>90%</td></tr>
+        <tr><td>Secret Layer</td><td>API key / OAuth / token 邊界</td><td>需輪替、去硬編碼、禁止入 Git</td><td>T3 Secret 修復</td><td>30%</td></tr>
+        <tr><td>pytest Entry</td><td>測試入口</td><td>需新增 pytest.ini 避開 Odoo filestore</td><td>T4 測試穩定</td><td>45%</td></tr>
+        <tr><td>Gateway / API</td><td>外部入口與 AI runtime 邊界</td><td>CORS / auth / proxy handler 需收斂</td><td>T5 Gateway 安全收斂</td><td>45%</td></tr>
+        <tr><td>Odoo Modules</td><td>社區 / 志工 / 物業模組</td><td>模組入口已辨識，資料模型待稽核</td><td>T6 Odoo 模組盤點</td><td>60%</td></tr>
+        <tr><td>Runtime Governance</td><td>五維碼、三問、動態賦能</td><td>理念已文件化，待接 runtime policy</td><td>T7 治理規格化</td><td>65%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>四、任務線進度</h2>
+    <div class="taskline">
+      <div class="step"><strong>T0 治理照准</strong><br>建立 Issue #7 P0/P1 安全穩定化、Issue #8 檔案照准與認知重構授權。</div>
+      <div class="step"><strong>T1 工作區邊界收斂</strong><br>確認 <code>/home/taiji_admin/Taiji_Hub</code> 是 canonical root；<code>_imports</code> 只作審查區。</div>
+      <div class="step"><strong>T2 匯入差異比對</strong><br>產出 canonical/import checksum、overlap、divergence、safe promotion list。</div>
+      <div class="step"><strong>T3 Secret 修復</strong><br>輪替 Gemini / LINE，硬編碼改環境變數，建立 .env.example，禁止秘密入 Git。</div>
+      <div class="step"><strong>T4 測試入口穩定</strong><br>新增 pytest.ini，限制 testpaths = tests，排除 Odoo data / filestore / venv / archives。</div>
+      <div class="step"><strong>T5 Gateway 安全收斂</strong><br>收斂 CORS、auth、proxy handler、docker exec fallback runtime adapter。</div>
+      <div class="step"><strong>T6 Odoo 模組盤點</strong><br>對三個自訂模組建立模型、權限、選單、資料依賴與完成度表。</div>
+      <div class="step"><strong>T7 即時進度網頁化</strong><br>把模組狀態、任務線、完成度改為可由 JSON 餵資料的 dashboard。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>五、下一步資料化方向</h2>
+    <div class="card">
+      <p>本頁目前是靜態示意版。下一版應拆成：</p>
+      <ul>
+        <li><code>dashboard/system-module-progress.html</code>：前端視覺頁。</li>
+        <li><code>dashboard/system-module-progress.json</code>：模組狀態與完成度資料源。</li>
+        <li><code>scripts/update_system_progress.py</code>：從 Git、pytest、檔案掃描、Issue 狀態更新 JSON。</li>
+      </ul>
+      <p class="muted">治理原則：進度圖只顯示路徑、狀態、完成度、風險級別；不得顯示 secrets、token、個資或 runtime 原始敏感資料。</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>
